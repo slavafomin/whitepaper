@@ -115,7 +115,7 @@ BNB will run on BSC in the same way as ETH runs on Ethereum so that it remains a
 
 ### Seed Fund
 
-Certain amounts of BNB will be burnt on BC and minted on BSC during its genesis stage. This amount is called “Seed Fund” to circulate on BSC after the first block, which will be dispatched to the initial BC-to-BSC Relayer(described in later sections) and initial validator set introduced at genesis. These BNBs are used to pay transaction fees in the early stage to transfer more BNB from BC onto BSC via the cross-chain mechanism.
+Certain amounts of BNB will be burnt on BC and minted on BSC during its genesis stage. This amount is called “Seed Fund” to circulate on BSC after the first block, which will be dispatched to the initial BC-to-BSC Relayer (described in later sections) and initial validator set introduced at genesis. These BNBs are used to pay transaction fees in the early stage to transfer more BNB from BC onto BSC via the cross-chain mechanism.
 
 The BNB cross-chain transfer is discussed in a later section, but for BC to BSC transfer, it is generally to lock BNB on BC from the source address of the transfer to a system-controlled address and unlock the corresponding amount from special contract to the target address of the transfer on BSC, or reversely, when transferring from BSC to BC, it is to lock BNB from the source address on BSC into a special contract and release locked amount on BC from the system address to the target address. The logic is related to native code on BC and a series of smart contracts on BSC.
 
@@ -204,10 +204,10 @@ For relayers, please also refer to the below “Relayers” section.
 
 BSC uses Proof of Staked Authority consensus protocol, which has a chance to fork and requires confirmation of more blocks. One block only has the signature of one validator, so that it is not easy to rely on one block to verify data from BSC.
 
-To take full advantage of validator quorum of BC, an idea similar to many [Bridge ](https://github.com/poanetwork/poa-bridge)or Oracle blockchains is adopted:
+To take full advantage of validator quorum of BC, an idea similar to many [Bridge](https://github.com/poanetwork/poa-bridge) or Oracle blockchains is adopted:
 
 1. The cross-chain communication requests from BSC will be submitted and executed onto BSC as transactions. The execution of the transanction wil emit `Events`, and such events can be observed and packaged in certain “**Oracle**” onto BC. Instead of Block Headers, Hash and Merkle Proof, this type of “Oracle” package directly contains the cross-chain information for actions, such as sender, receiver and amount for transfer.
-2. To ensure the security of the Oracle, the validators of BC will form anothe quorum of “**Oracle Relayers**”. Each validator of the BC should run a **dedicated process** as the Oracle Relayer. These Oracle Relayers will submit and  vote for the cross-chain communication package, like Oracle, onto BC,  using the same validator keys. Any package signed by more than ⅔\*N+1 Oracle Relayers’ voting power is as secure as any block signed by ⅔\*N+1 of     the same quorum of validators’ voting power.
+2. To ensure the security of the Oracle, the validators of BC will form another quorum of “**Oracle Relayers**”. Each validator of the BC should run a **dedicated process** as the Oracle Relayer. These Oracle Relayers will submit and  vote for the cross-chain communication package, like Oracle, onto BC,  using the same validator keys. Any package signed by more than ⅔\*N+1 Oracle Relayers’ voting power is as secure as any block signed by ⅔\*N+1 of     the same quorum of validators’ voting power.
 
 By using the same validator quorum, it saves the light client code on BC and continuous block updates onto BC. Such Oracles also have Oracle IDs and types, to ensure sequencing and proper error handling.
 
@@ -322,7 +322,7 @@ The package they relay will be verified by the on-chain light client on BSC. The
 There are two major communication types:
 
 1. Users triggered Operations, such as `token bind` or `cross chain transfer`. Users must pay additional fee to as relayer reward. The reward will be shared with the relayers who sync the referenced blockchain headers. Besides, the reward won't be paid the relayers' accounts directly. A reward distribution mechanism will be brought in to avoid monopolization.
-2. System Synchronization, such as delivering `refund package`(caused by failures of most oracle relayers), special blockchain header synchronization(header contains BC validatorset update), BSC staking package. System reward contract will pay reward to relayers' accounts directly.
+2. System Synchronization, such as delivering `refund package` (caused by failures of most oracle relayers), special blockchain header synchronization (header contains BC validatorset update), BSC staking package. System reward contract will pay reward to relayers' accounts directly.
 
 If some Relayers have faster networks and better hardware, they can monopolize all the package relaying and leave no reward to others. Thus fewer participants will join for relaying, which encourages centralization and harms the efficiency and security of the network. Ideally, due to the decentralization and dynamic re-election of BSC validators, one Relayer can hardly be always the first to relay every message. But in order to avoid the monopolization further, the rewarding economy is also specially designed to minimize such chance:
 
@@ -333,7 +333,7 @@ If some Relayers have faster networks and better hardware, they can monopolize a
 
 Relayers for BSC to BC communication are using the “Oracle” model, and so-called “**Oracle Relayers**”. Each of the validators must, and only the ones of the validator set, run Oracle Relayers. Each Oracle Relayer watches the blockchain state change. Once it catches Cross-Chain Communication Packages, it will submit to vote for the requests. After Oracle Relayers from ⅔ of the voting power of BC validators vote for the changes, the cross-chain actions will be performed.
 
-Oracle Replayers should wait for enough blocks to confirm the finality on BSC before submitting and voting for the cross-chain communication packages onto BC.
+Oracle Relayers should wait for enough blocks to confirm the finality on BSC before submitting and voting for the cross-chain communication packages onto BC.
 
 The cross-chain fees will be distributed to BC validators together with the normal BC blocking rewards.
 
